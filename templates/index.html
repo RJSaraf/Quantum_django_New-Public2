@@ -1,0 +1,322 @@
+﻿{% load static %}
+<html lang="en-us">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="Keywords" content="HTML,CSS,JavaScript,DOM,jQuery,PHP,SQL,XML,Python,Java,Bootstrap,Web,W3CSS,W3C,tutorials,programming,development,training,learning,quiz,primer,lessons,reference,examples,source code,colors,demos,tips,w3c">
+
+<head>
+    <title>Quantum Lab</title>
+        <link rel="icon" type="image/icon type" href="{% static 'QL.png' %}">
+        <link rel="stylesheet" type="text/css"  href="{% static 'css/index.css' %}">
+        <link rel="stylesheet" type="text/css"  href="{% static 'css/style_footer.css' %}">
+        <link rel="stylesheet" type="text/css"  href="{% static 'css/fontawesome.min.css' %}">
+
+        <script src="{% static 'js/index.js' %}"></script>
+        <script src="{% static 'js/jQuery.js' %}"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/ajax.googleapis.js' %}"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/w3.css' %}">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-reboot.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-reboot.min.css' %}">
+
+
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+</head>
+
+<body onload="('WELCOME!')" style="background-color : white;">
+
+<div class='navigation d-flex bg-light w-100' id="nav" style="position:fixed; transition: 1s; z-index:99;">
+
+    <div class="d-inline-block w-50">
+        <a id="tdn" href="{% url 'homepage:home' %}" class="w3-bar-item w3-text-blue mx-1 font-weight-bold">Quantum LAB</a>
+        <a id="tdn" href="" class="w3-bar-item w3-button w3-hide-medium w3-hide-small">About</a>
+        <a id="tdn" href="{% url 'blog:post_list' %}" class="w3-bar-item w3-button w3-hide-small">Blog</a>
+        <a id="tdn" href="{% url 'TheSocialClub:home' slug=request.user %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium">The Social Club</a>
+        <div class="w3-dropdown-hover">
+            <button class="w3-button w3-hide-large">More</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a id="tdn" href="#" class="w3-bar-item w3-button w3-hide-large">About</a>
+                <a id="tdn" href="{% url 'blog:post_list' %}" class="w3-bar-item w3-button w3-hide-large w3-hide-medium">Blog</a>
+                <a id="tdn" href="{% url 'TheSocialClub:home' slug=request.user %}" class="w3-bar-item w3-button w3-hide-large w3-hide-medium">The Social Club</a>
+                <a id="tdn" href="#" class="w3-bar-item w3-button w3-hide-large">Messanger</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-inline-block w-50">
+        {% if request.user.is_authenticated %}
+            <a href="/search/" class="w3-bar-item w3-button w3-hide-small"><img src="{% static 'png/loupe.png' %}" style="height:22px;width:22px;"></a>
+            <a href="" class="w3-bar-item w3-button w3-hide-medium w3-hide-small"><img src="{% static 'png/003-wordpress.png' %}" style="height:22px;width:22px;"></a>
+            <a href="" class="w3-bar-item w3-button w3-hide-medium w3-hide-small"><img src="{% static 'png/021-chat.png' %}" style="height:22px;width:22px;"></a>
+
+            <div class="w3-dropdown-hover">
+                <div class="w3-bar-item w3-button">
+                    <img src="{% static 'png/048-notification.png' %}" style="height:22px;width:22px;">
+                    <i class="w3-pink w3-circle" style="height:3px; width:3px; right:10px; position: relative;">
+                    {% for friends in friendrequest %}
+                    *
+                    {% endfor %}
+                    </i>
+                </div>
+
+                <div class="w3-dropdown-content w3-card-4">
+                    {% for friends in friendrequest %}
+                        <div class="w3-button w3-hover-black p-4 w3-black w-100 d-block">
+                            <span class="w3-text-aqua">{{friends.sender.username}}</span> <span class="w3-text-white"> sent you a friend request. </span>
+                            <a href="{% url 'TheSocialClub:AcceptRequest' reciever=request.user.username sender=friends.sender.username %}"><div class="w3-text-green d-inline-block">Accept</div></a>
+                            <a href="{% url 'TheSocialClub:DeclineRequest' reciever=request.user.username sender=friends.sender.username %}"><div class="w3-text-red d-inline-block">Decline</div></a>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+
+            <a class="w3-bar-item w3-button" {% if request.user.userinfo.slug %} href="{% url 'accounts:details' slug=request.user.userinfo.slug %}"{% endif %}>
+                <img class="w3-circle" src="{% if request.user.userinfo.propic %}{{request.user.userinfo.propic.url}}{% endif %}" style="height:22px;width:22px;">
+            </a>
+
+            <a id="tdn" class="w3-bar-item w3-button w3-right" href="{% url 'accounts:logout'%}">LOGOUT</a>
+            <a id="tdn" class="w3-bar-item w3-button w3-right w3-hide-small">Hello, <span style="padding-left:2px;" >{{request.user.first_name.upper}}</span></a>
+
+        {% else %}
+
+            <a id="tdn" class="w3-bar-item w3-button w3-right w3-text-blue" href="{% url 'accounts:login' %}">Login</a>
+            <a id="tdn" class="w3-bar-item w3-button w3-right w3-text-green" href="{% url 'accounts:signup' %}">Sign Up</a>
+
+        {% endif %}
+    </div>
+
+</div><!--Navbar End-->
+
+{% block body_index %}
+
+{% if not user.is_authenticated %}
+  
+    <div class="divfixed w-100" style="height:3000px;">
+
+        <div class="loginimg w-100 w3-2019-princess-blue w3-card-4" style="height: 25%;">
+
+            <div class="row w3-display-container w-100 h-100" style="padding:0px;margin:0px;">
+                <div class="d-block h-50 w3-display-middle col-lg-3 col-md-4 col-sm-6">
+                    <div class="d-block p-3">
+                        <span class="display-3">Qlab</span><br>
+                        <span class="font-weight-bold">Make stuff, look at stuff, talk about stuff, find your people.</span>
+                    </div>
+
+                    <a href="{% url 'accounts:signup' %}">
+                        <div class="d-block p-2 m-2 w3-green center text-lg-center text-md-center w3-hover-blue-gray">
+                            Sign Up
+                        </div>
+                    </a>
+
+                    <a href="{% url 'accounts:login' %}">
+                        <div class="d-block p-2 m-2 w3-2019-princess-blue text-lg-center text-md-center w3-hover-blue">
+                            Login
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="w-100 w3-2021-burnt-coral w3-card-4 w3-hide-small screen" style="height: 25%;">
+            
+            <div class="row h-100 w-50 mx-auto">
+                <div class="col-12 text-center">
+                    <span class="font-weight-bold">What is QL?</span>
+                </div>
+                <div class="col-12">
+                    <div class="w-25 mx-auto">
+                        <img src="{% static 'QL.png' %}">
+                    </div>
+                    <div class="text-lg-center">
+                        <span class="display-4">QL is so easy to use that it’s hard to explain.</span><br><br>
+                        <span class="w3-large">We made it really, really simple for people to make a blog and put whatever they want on it. Stories, photos, GIFs. Connect with friends, work colleagues or people they don't know, online.
+                            and share pictures, articles, as well as their own thoughts 
+                            and opinions with however many people they like.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="w-100 w3-2021-raspberry-sorbet w3-card-4 w3-display-container w3-hide-small screen" style="height: 15%;">
+            
+            <div class="w3-display-left w3-display-container w-50 h-50 my-auto">
+                
+                <div class="w3-display-middle w-75">
+                    <span class="display-4">Create blogs</span><br><br>
+                    <span class="w3-large">Publish your passions your way. Whether you'd like to share your knowledge, experiences
+                        or the latest news, create a unique and beautiful blog</span>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="w3-display-container w-100 w3-2021-mint w3-card-4 w3-hide-small screen" style="height: 15%;">
+        
+            <div class="w3-display-right w3-display-container w-50 h-50 my-auto">
+                
+                <div class="w3-display-middle w-75">
+                    <span class="display-4">The Social Club</span><br><br>
+                    <span class="w3-large">It allows users to connect with friends, work colleagues or people they don't know, online.
+                        They can share pictures, music, videos, and articles, as well as their own thoughts 
+                        and opinions with however many people they like.</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="w-100 w3-2020-navy-blazer w3-card-4 w3-hide-small" style="height: 20%;">
+
+            <br>
+            <div class="w-100">
+                <img src="{% static 'QL.png' %}" style="height:50px;width:50px;" class="m-5">
+            </div>
+
+            <br><br><br>
+            <div class=" w-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <h4>About</h4>
+                            <p class="text-justify">QL <i>We made it really, really simple for people to make a blog and put whatever they want on it. Stories, photos, GIFs. Connect with friends, work colleagues or people they don't know, online. and share pictures, articles, as well as their own thoughts and opinions with however many people they like.</i></p>
+                        </div>
+                    
+                        <div class="col-xs-6 col-md-3">
+                                <h6>Categories</h6>
+                                <ul class="footer-links">
+                                <li><a href="http://scanfcode.com/category/c-language/">Messages</a></li>
+                                <li><a href="http://scanfcode.com/category/front-end-development/">Friendlist</a></li>
+                                <li><a href="http://scanfcode.com/category/back-end-development/">Profile</a></li>
+                                <li><a href="http://scanfcode.com/category/java-programming-language/">Blogs</a></li>
+                                <li><a href="http://scanfcode.com/category/android/">Feedback</a></li>
+                                <li><a href="http://scanfcode.com/category/templates/">Request</a></li>
+                                </ul>
+                        </div>
+                    
+                        <div class="col-xs-6 col-md-3">
+                                <h6>Quick Links</h6>
+                                <ul class="footer-links">
+                                <li><a href="http://scanfcode.com/about/">About Us</a></li>
+                                <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+                                <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
+                                <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
+                                <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+                                </ul>
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by 
+                            <a href="#">QuantumLab</a>.
+                                </p>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <ul class="social-icons">
+                                <li><img src="{% static 'png/036-facebook.png' %}" style="height:35px;width:35px;" class="w3-circle"></li>
+                                <li><img src="{% static 'png/008-twitter.png' %}" style="height:35px;width:35px;" class="w3-circle"></li>
+                                <li><img src="{% static 'png/001-youtube.png' %}" style="height:35px;width:35px;" class="w3-circle"></li>
+                                <li><img src="{% static 'png/029-instagram.png' %}" style="height:35px;width:35px;" class="w3-circle"></li>   
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
+        </div>
+
+    </div>
+
+{% else %}
+
+    <div class="row loginimg w-100 h-100 w3-2019-princess-blue w3-card-4 align-items-center pm0">
+
+        <div class="col-lg-6 col-md-6 col-sm-10 row mx-auto pm0 w3-card-4 w3-white border">
+            
+            <div class="col-12 w3-center my-5 pm0">
+                <span class="w3-xxxlarge w3-text-black w3-round-large p-1">Welcome! {{request.user.first_name.upper}}</span>
+            </div>
+            
+            <div class="col-lg-6 col-sm-12 row align-items-center my-2 pm0">
+                <div class="w3-center col pm0">
+                    <a href="{% url 'blog:post_list' %}">
+                        <img class="w3-round-xlarge w3-card-4 my-2" src="{% static 'images/Blog.jpg' %}" style="height:100px;width:100px;">
+                    </a><br>
+                    <span class="w3-xxlarge w3-text-black">Blogs</span>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-12 row align-items-center my-2 pm0">
+                <div class="w3-center col pm0">
+                    <a href="{% url 'TheSocialClub:home' slug=request.user %}">
+                        <img class="w3-round-xlarge w3-card-4 my-2" src="{% static 'images/TheSocialClub.jpg' %}" style="height:100px;width:100px;">
+                    </a><br>
+                    <span class="w3-xxlarge w3-text-black">The Social Club</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endif %}    
+
+    <style>
+    
+        .loginimg{
+        background:url('{% static "images/lucas-benjamin.jpg" %}');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    
+    @media only screen and (max-width: 850px) {
+        .screen {
+          display: none;
+        }
+
+      .divfixed {
+        height: 100%;
+        position: fixed;
+      }
+    }
+
+    .tdn{
+        text-decoration: none;
+    }
+    
+    #tdn{
+        text-decoration: none;
+    }
+
+    .pm0{
+        padding:0px;
+        margin:0px;
+    }
+
+    </style>
+
+{% endblock body_index %}
+
+</body>
+</html>

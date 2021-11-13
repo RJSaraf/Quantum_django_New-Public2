@@ -1,0 +1,240 @@
+{% extends 'index.html' %}
+{% block body_index %}
+{% load static %}
+
+
+<div class="row w-100 border border-dark" style="height: 100%; position: fixed; top:38px; margin:0px;">
+                
+    <div class=" col-lg-3 w3-hide-small w3-hide-medium" style="background-color:#e4f0f6; padding:0px;margin:0px;">
+
+        <a href="{% url 'accounts:details' slug=request.user.username %}">
+            <div class="w3-row w3-round-large w-100 w3-hover-light-blue pl-2">
+                
+                <img class="w3-circle w3-left w3-quarter my-2" src="{% if request.user.userinfo.propic %}{{request.user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;">
+                
+                <div class="w3-col w-75 p-2">
+                    <div class="p-1">
+                        <div class="w3-text-blue-gray">{{ request.user.first_name|capfirst}} {{ request.user.last_name|capfirst}}</div>
+                    </div>
+                </div>    
+                
+            </div>
+        </a>
+
+        <div class="w3-row w3-round-large w-100 w3-hover-light-blue p-2">Friends</div>
+        <div class="w3-row w3-round-large w-100 w3-hover-light-blue p-2">Groups</div>
+        <div class="w3-row w3-round-large w-100 w3-hover-light-blue p-2">Blogs</div>
+
+    </div>
+
+    <div class="col-lg-6 col-md-8 row d-inline-block overflow-auto h-100" style="background-color:#e4f0f6; padding:0px;margin:0px;">
+
+        <div class="w-100 w3-hide-medium w3-hide-large" style="height:10%;">
+
+            <div class="w3-button p-3 m-1 w3-left" onclick="w3_open()">☰</div>
+
+            <a href="{% url 'accounts:details' slug=request.user.username %}">
+                <div class="h-100 w-50 w3-row w3-round-large w3-hover-light-blue pl-2 w3-left">
+                    
+                    <div class="h-100 w3-left">
+                        <img class="w3-circle my-3" src="{% if request.user.userinfo.propic %}{{request.user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;">
+                    </div>
+
+                    <div class="w3-col w-75 h-50 my-auto">
+                        <div class="p-3 m-1">
+                            <div class="w3-text-blue-gray">{{ request.user.first_name|capfirst}} {{ request.user.last_name|capfirst}}</div>
+                        </div>
+                    </div>    
+                    
+                </div>
+            </a>
+
+            <div class="w-100 w3-sidebar w3-bar-block w3-card w3-xlarge w3-animate-left" style="display:none;z-index:2; background-color:#37c495" id="mySidebar">
+                
+                <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item text-decoration-none">|||</a>
+                <br>
+                <div class="w3-container overflow-auto" style="height: 85%;">
+                    {% for friend in friendlist %}
+                        {% for user in friend.friends.all %}
+                            
+                            <div class="w3-row w3-round-large w3-text-white w-100 w3-hover-gray pl-2">
+                                <a href="{% url 'accounts:details' slug=user.username %}">
+                                    <img class="w3-circle w3-left w3-quarter my-2" src="{% if user.userinfo.propic %}{{user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;">
+                                </a>
+                                <a href="{% url 'TheSocialClub:friendsingle' slug=user.username pk=user.id %}">
+                                    <div class="w3-col w-75 p-2">
+                                        <div class="p-1">
+                                            <div class="w3-text-white">{{ user.username}}</div>
+                                        </div>
+                                    </div>
+                                </a> 
+                            </div>
+                        {% empty %}
+                            <span class="w3-small py-2">you have no friends.</span>
+                        {% endfor %}
+
+                    {% endfor %}
+                </div>
+
+            </div>
+
+        </div>    
+        
+        <a onclick="document.getElementById('id01').style.display='block'">
+            <div class="d-block w3-row mt-2 w3-border bg-light w3-card-4 p-3 w3-round-large w-75 mx-auto">
+                <div class="w3-left w3-col s1 my-auto"><img src="{% if request.user.userinfo.propic %}{{request.user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;" class="w3-circle"></div>
+                <div class="w3-col ml-4 s10 my-auto p-2 w3-round-xxlarge bg-secondary">
+                    <span class="text-decoration-none">Whats on your mind {{request.user.first_name.upper}}!</span>      
+                </div>
+            </div>
+        </a>
+
+        <div id="id01" class="w3-modal">
+          <div class="w3-modal-content w3-card-4">
+            <header class="w3-container border-bottom"> 
+              <span onclick="document.getElementById('id01').style.display='none'" 
+              class="w3-button w3-display-topright">&times;</span>
+              <h2>Create Post</h2>
+            </header>
+            <br>
+            <div class="w3-container">
+              <form action="{% url 'TheSocialClub:createpost' username=request.user.username %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ postform.as_p }}
+                <button type="submit" value="Post" class="w3-2021-french-blue w3-round-large" style="width:100%;">Post</button>
+              </form>
+              <br>
+            </div>
+          </div>
+        </div>
+      
+      
+        
+        <div class="col-lg-10 col-md-9 col-sm-10 d-block mx-auto overflow-hidden">
+            {% for post in posts %}
+                {% include "posts/_post.html" %}
+            {% endfor %}
+        </div>
+        
+        <br><br><br>
+
+    </div>
+
+    <div class="col-lg-3 col-md-4 w3-hide-small overflow-auto d-inline-block h-100" style="background-color:#37c495; padding:0px;margin:0px;">
+        
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col font"><h4> Friend List </h4></div>
+            </div>
+        </div>
+
+        <div class="w3-container">
+            {% for friend in friendlist %}
+                {% for user in friend.friends.all %}
+                    
+                    <div class="w3-row w3-round-large w3-text-white w-100 w3-hover-gray pl-2">
+                        <a href="{% url 'accounts:details' slug=user.username %}">
+                            <img class="w3-circle w3-left w3-quarter my-2" src="{% if user.userinfo.propic %}{{user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;">
+                        </a>
+                        <a href="{% url 'TheSocialClub:friendsingle' slug=user.username pk=user.id %}">
+                            <div class="w3-col w-75 p-2">
+                                <div class="p-1">
+                                    <div class="w3-text-white">{{ user.username}}</div>
+                                </div>
+                            </div>
+                        </a> 
+                    </div>
+                    
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+                    console.log(window.location)
+                    var loc = window.location
+                    var Form = $('.msgform')
+                    var msgInput = $('.msgtext')
+                    var result = $('#append')
+
+                    var wsStart = 'ws://'
+                    if(loc.protocol == 'https:'){
+                        wsStart = 'wss://'
+                    }
+
+                    var endpoint = wsStart + loc.host + loc.pathname
+                    var socket = new ReconnectingWebSocket(endpoint)
+
+                    socket.onmessage = function(e){
+                        console.log('message', e)
+                        console.log('message', e.data)
+                        var user = JSON.parse(e.data)
+                        result.append('<div class="p-2 w3-red">' + user.username + '</div>' + '<br>' + '<div>' + user.email + '</div>')
+                        
+                    }
+
+                    socket.onopen = function(e){
+                        console.log('open', e)
+                        console.log('message', e.data)  
+
+                        Form.submit(function(event){
+                        event.preventDefault();
+                            
+                        var msgtext = msgInput.val()
+                        var data_dict = {'message':msgtext}
+                        socket.send(JSON.stringify(data_dict))
+                        msgInput.val('')
+
+                        })
+
+                        
+
+                    }
+
+                    socket.onerror = function(e){
+                        console.log('error', e)
+                    }
+
+                    socket.onclose = function(e){
+                        console.log('close', e)
+                    }
+
+                    // Script to open and close sidebar
+                    function w3_open() {
+                        document.getElementById("mySidebar").style.display = "block";
+                    }
+                    
+                    function w3_close() {
+                        document.getElementById("mySidebar").style.display = "none";
+                    }
+                            
+</script>
+
+<style>
+
+    ::-webkit-scrollbar {
+        width: 5px;
+      }
+      
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: none; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: rgba(3, 163, 212, 0.308); 
+      }
+      
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(85, 85, 85); 
+      }
+
+</style>
+
+{% endblock body_index %}
