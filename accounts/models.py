@@ -37,6 +37,6 @@ class UserInfo(models.Model):
      return self.user.username.lower()
 
    def save(self, *args, **kwargs):
-        self.slug = slugify(self.user.username.lower())
+        self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
 
