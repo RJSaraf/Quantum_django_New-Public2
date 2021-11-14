@@ -1,0 +1,1 @@
+web: gunicorn Quantum_django.wsgi --log-file -
