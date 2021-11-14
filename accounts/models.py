@@ -34,9 +34,9 @@ class UserInfo(models.Model):
      return reverse("accounts:details", kwargs={"slug": self.slug})
 
    def __str__(self):
-     return self.user.username
+     return self.user.username.lower()
 
    def save(self, *args, **kwargs):
-        self.slug = slugify(self.user.username)
+        self.slug = slugify(self.user.username.lower())
         super().save(*args, **kwargs)
 
