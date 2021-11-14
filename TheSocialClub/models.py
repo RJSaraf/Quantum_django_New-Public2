@@ -6,7 +6,6 @@ from django.db import IntegrityError
 # Create your models here.
 # TheSocialClub
 
-import misaka
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
