@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 
 from django.contrib import auth
 from accounts.models import UserInfo
-from accounts.forms import UserForm
-from . import forms
+from accounts.forms import UserForm, UserCreateForm
 
 from TheSocialClub.forms import PostForm, GroupForm, ChatForm
 from TheSocialClub.models import Group, GroupMember, Post, FriendsList, FriendRequest
@@ -111,6 +110,12 @@ class UserInfoUpdateView(UpdateView):
 
 class SignUp(CreateView):
 
-   form_class = forms.UserCreateForm
+   form_class = UserCreateForm
    success_url = reverse_lazy('accounts:login')
    template_name = 'signup.html'
+
+   def form_valid(self, form):
+         article = form.save(commit=False)
+         article.username = article.username.lower()
+         print("New User Created - " + article.username)
+         return super(SignUp, self).form_valid(form)
