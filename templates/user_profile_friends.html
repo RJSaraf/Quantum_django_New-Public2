@@ -1,0 +1,68 @@
+{% extends 'user_profile.html' %}
+{% block profilepage %}
+
+<div class="w-100" style="height:600px; background-color:#e4f0f6;">
+
+
+    <br><br>                     
+    <div class="container border col-6 mx-auto w3-white p-3 w3-round-xlarge w3-card-4" style="height:520px;">
+    
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Friends" title="Type in a name" class="col-12 mx-auto w3-round-xlarge w3-black p-3" style="outline: none;">
+        <br><br>
+
+        <span class="font-weight-bold">{% for friend in friendlist %} {{friend.friends.count}} Friends{% endfor %}</span>
+
+            {% for friend in friendlist %}
+            {% for user in friend.friends.all %}
+            
+            <div class="w3-row w3-round-large w3-text-black w-100 w3-hover-blue p-2 li">
+                
+                <a href="{% url 'accounts:details' slug=user.username %}">
+                    
+                    <img class="w3-circle w3-left w3-quarter my-2" src="{% if user.userinfo.propic %}{{user.userinfo.propic.url}}{% endif %}" style="height:35px;width:35px;">
+               
+                    <div class="w3-col w-75 p-2">
+                        <div class="p-1">
+                            <div class="w3-text-black"> {{ user.first_name }} {{ user.last_name }}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+             
+            {% endfor %}
+            {% endfor %}
+
+            
+            
+
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+    function myFunction() {
+        var input, filter, li, a, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        li = document.getElementsByClassName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+{% endblock profilepage %}

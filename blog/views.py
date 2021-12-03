@@ -30,7 +30,7 @@ class PostListView(ListView):
         
         context = super(PostListView, self).get_context_data(*args, **kwargs)
         context['mypost'] = Post.objects.filter(author=self.request.user, is_published=True).order_by('-published_date')      
-        context['mostpopular'] = Post.objects.all().annotate(count=Count('like')).order_by('-count')[:5]
+        context['mostpopular'] = Post.objects.filter(is_published=True).annotate(count=Count('like')).order_by('-count')[:5]
         return context
     
 

@@ -26,7 +26,7 @@
     
    <link rel="stylesheet" type="text/css" href="{% static 'css/w3.css' %}">
 
-<div class="overflow-auto position-relative">
+<div class="position-relative" style="background-color: white;">
 
     <div id="coverblur" class="w-100 w3-card-2">
 
@@ -44,30 +44,41 @@
                 </div>
             </div>
             
+            {% url 'accounts:details' slug=user.slug as post %}
+            {% url 'accounts:details_friends' slug=user.slug as friend %}
+            {% url 'accounts:details_blogs' slug=user.slug as blog %}
+            
+
+
             
             <div class="w-100 border-top" style="height:10%;">
+                    <a href="{% url 'accounts:details' slug=user.slug %}" class="text-decoration-none">
+                        <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large {% if request.get_full_path == post %}w3-blue{% endif %}">
+                            <span class="p-2">Post</span>
+                        </div>
+                    </a>
                     
-                    <div class="d-inline-block p-3 w3-text-blue w3-hover-light-gray w3-round-large">
-                        <span class="p-2">Post</span>
-                    </div>
-                    
-                    <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small w3-hide-medium">
+                    <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small w3-hide-medium" data-toggle="tooltip" data-placement="top" title="Coming Soon...">
                         <span class="">About</span>
                     </div>
 
-                    <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small">
-                        {% for friend in friendlist %}
-                            <span>Friends</span><span class="w3-small"> {{friend.friends.count}}</span>
-                        {% endfor %}
-                    </div>
+                    <a href="{% url 'accounts:details_friends' slug=user.slug %}" class="text-decoration-none">
+                        <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small {% if request.get_full_path == friend %}w3-blue{% endif %}">
+                            {% for friend in friendlist %}
+                                <span>Friends</span><span class="w3-small"> {{friend.friends.count}}</span>
+                            {% endfor %}
+                        </div>
+                    </a>
+                     
+                    <a href="{% url 'accounts:details_blogs' slug=user.slug %}" class="text-decoration-none">
+                        <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small w3-hide-medium {% if request.get_full_path == blog %}w3-blue{% endif %}">
+                            <span class="">Blogs {{blogcount}}</span>
+                        </div>
+                    </a>
 
-                    <div class="d-inline-block p-3 w3-hover-light-gray w3-round-large w3-hide-small w3-hide-medium">
-                        <span class="">Blogs</span>
-                    </div>
-
-                    <div class="d-inline-block w3-hover-light-gray w3-round-large p-3">
-                        <span class="">More</span>
-                    </div>
+                    <div class="d-inline-block w3-hover-light-gray w3-round-large p-3" data-toggle="tooltip" data-placement="top" title="Coming Soon...">
+                        <span>More</span>
+                    </div>                  
                     
                     {% if request.user == user.user %}
                     <div class="w3-right d-inline-block w3-light-gray btn w3-hover-gray m-2">
@@ -113,9 +124,12 @@
         
         </div>
 
-    </div><!-- Cover -->
+    </div>
+    <!-- Cover -->
 
-    <div class="w-100" style="background-color: #e4f0f6;">
+    {% block profilepage %}
+
+    <div class="w-100 overflow-none position-relative" style="background-color: #e4f0f6;height:auto;">
 
         <div class="col-lg-9 col-md-10 d-flex flex-wrap row mx-auto py-3">
             <div class="left col-lg-5 col-md-5 col-sm-12">
@@ -203,7 +217,7 @@
                                     <a class="text-decoration-none" href="{{blog.get_absolute_url}}">
                                         <div class="w3-center"><img class="w3-round-large" src="{% if blog.postimage %}{{blog.postimage.url}}{% endif %}" style="height:100px; width:100px;"></div>
                                     </a>
-                                <div class="w3-center w3-small mt-1">{{blog.title}}</div>
+                                <div class="w3-center w3-small mt-1">{{blog.title|truncatechars:30}}</div>
                                 </div>
                             {% endfor %}
                         </div>    
@@ -215,7 +229,7 @@
                 </div>
             </div>
 
-            <div class="w3-right col-lg-7 col-md-7 col-sm-12">
+            <div class="w3-right col-lg-7 col-md-7 col-sm-12 overflow-auto" style="height:1500px; z-index: inherit;">
                 {% if request.user == user.user %}
                 <div class="what's_on_your_mind w-75 mx-auto">
 
@@ -264,11 +278,33 @@
 
             </div>
 
-
         </div>
     </div>
 
+    {% endblock profilepage %}
 
+    <style>
+
+        ::-webkit-scrollbar {
+            width: 5px;
+          }
+          
+          /* Track */
+          ::-webkit-scrollbar-track {
+            background: none; 
+          }
+           
+          /* Handle */
+          ::-webkit-scrollbar-thumb {
+            background: rgba(32, 44, 44, 0.308); 
+          }
+          
+          /* Handle on hover */
+          ::-webkit-scrollbar-thumb:hover {
+            background: rgb(85, 85, 85); 
+          }
+    
+    </style>
 
 
 </div>

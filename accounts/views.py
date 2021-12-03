@@ -28,7 +28,7 @@ def logout(request):
     return redirect('/')
 
 
-class UserView(DetailView, LoginRequiredMixin):
+class UserView(LoginRequiredMixin, DetailView):
    login_url = 'accounts:login'
 
    context_object_name = 'user'
@@ -82,6 +82,118 @@ class UserView(DetailView, LoginRequiredMixin):
             return context
 
 
+
+class UserViewFriends(LoginRequiredMixin, DetailView):
+   login_url = 'accounts:login'
+
+   context_object_name = 'user'
+   model = UserInfo
+   template_name = "user_profile_friends.html"
+
+   def is_friend(self):
+      user = get_object_or_404(User, username=self.kwargs.get('slug'))
+      try:
+         FL= FriendsList.objects.get(user=user)
+         if self.request.user in FL.friends.all():
+            return True
+         else:
+            return False
+
+      except FriendsList.DoesNotExist:
+         return False
+
+   def is_active(self):
+      user = get_object_or_404(User, username=self.kwargs.get('slug'))
+      if FriendRequest.objects.filter(sender=self.request.user, reciever=user, is_active=True).exists():
+         return True
+      else:
+         return False
+
+   def intersection(self, lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+   def get_context_data(self, *args, **kwargs):
+
+            user = get_object_or_404(User, username=self.kwargs.get('slug'))
+            userFL = list(get_object_or_404(FriendsList, user=user).friends.all())
+            requserFL = list(get_object_or_404(FriendsList, user=self.request.user).friends.all())
+            mutual_friend = self.intersection(lst1=userFL, lst2=requserFL)
+            Friends = get_object_or_404(FriendsList, user=user).friends.all().order_by('id')[:9]
+            blogcount = models.Post.objects.filter(author=user, is_published=True).count()
+
+            context = super(UserViewFriends, self).get_context_data(*args, **kwargs)
+            context['blogcount'] = blogcount
+            context['limitedbloglist'] = models.Post.objects.filter(author=user, is_published=True)[:9]
+            context['posts'] = Post.objects.filter(user=user)
+            context['form'] = PostForm
+            context['friendlist'] = FriendsList.objects.filter(user=user)
+            context['limitedfriendlist'] = Friends #friendslist
+            context['sentfriendrequest'] = FriendRequest.objects.filter(sender=self.request.user, reciever=user, is_active=True) # Cancel Request
+            context['is_active'] = {"yn" : self.is_active()} # Add Friend
+            context['friendrequest'] = FriendRequest.objects.filter(reciever=self.request.user, is_active=True) #For Navbar
+            context['is_friend'] = {"isf" : self.is_friend()} # Is Friend
+            context['mutual_friend'] = len(mutual_friend)
+            return context
+
+
+
+class UserViewBlogs(LoginRequiredMixin, DetailView):
+   login_url = 'accounts:login'
+
+   context_object_name = 'user'
+   model = UserInfo
+   template_name = "user_profile_blogs.html"
+
+   def is_friend(self):
+      user = get_object_or_404(User, username=self.kwargs.get('slug'))
+      try:
+         FL= FriendsList.objects.get(user=user)
+         if self.request.user in FL.friends.all():
+            return True
+         else:
+            return False
+
+      except FriendsList.DoesNotExist:
+         return False
+
+   def is_active(self):
+      user = get_object_or_404(User, username=self.kwargs.get('slug'))
+      if FriendRequest.objects.filter(sender=self.request.user, reciever=user, is_active=True).exists():
+         return True
+      else:
+         return False
+
+   def intersection(self, lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+   def get_context_data(self, *args, **kwargs):
+
+            user = get_object_or_404(User, username=self.kwargs.get('slug'))
+            userFL = list(get_object_or_404(FriendsList, user=user).friends.all())
+            requserFL = list(get_object_or_404(FriendsList, user=self.request.user).friends.all())
+            mutual_friend = self.intersection(lst1=userFL, lst2=requserFL)
+            Friends = get_object_or_404(FriendsList, user=user).friends.all().order_by('id')[:9]
+            blogcount = models.Post.objects.filter(author=user, is_published=True).count()
+
+            context = super(UserViewBlogs, self).get_context_data(*args, **kwargs)
+            context['blogcount'] = blogcount
+            context['limitedbloglist'] = models.Post.objects.filter(author=user, is_published=True)[:9]
+            context['posts'] = Post.objects.filter(user=user)
+            context['form'] = PostForm
+            context['friendlist'] = FriendsList.objects.filter(user=user)
+            context['limitedfriendlist'] = Friends #friendslist
+            context['sentfriendrequest'] = FriendRequest.objects.filter(sender=self.request.user, reciever=user, is_active=True) # Cancel Request
+            context['is_active'] = {"yn" : self.is_active()} # Add Friend
+            context['friendrequest'] = FriendRequest.objects.filter(reciever=self.request.user, is_active=True) #For Navbar
+            context['is_friend'] = {"isf" : self.is_friend()} # Is Friend
+            context['mutual_friend'] = len(mutual_friend)
+            return context
+
+
+
+
 class UserInfoCreateView(CreateView):
      login_url = '/'
      redirect_field_name = 'user_profile.html'
@@ -99,7 +211,7 @@ class UserInfoCreateView(CreateView):
 
 
 
-class UserInfoUpdateView(UpdateView):
+class UserInfoUpdateView(LoginRequiredMixin, UpdateView):
      login_url = '/'
      redirect_field_name = 'user_profile.html'
 
@@ -108,7 +220,7 @@ class UserInfoUpdateView(UpdateView):
      template_name = "EditUserInfo.html"
 
 
-class SignUp(CreateView):
+class SignUp(LoginRequiredMixin, CreateView):
 
    form_class = UserCreateForm
    success_url = reverse_lazy('accounts:login')
@@ -119,3 +231,11 @@ class SignUp(CreateView):
          article.username = article.username.lower()
          print("New User Created - " + article.username)
          return super(SignUp, self).form_valid(form)
+
+
+
+class SearchUsers(LoginRequiredMixin, ListView):
+
+   context_object_name = 'users'
+   model = User
+   template_name='global_search.html'
