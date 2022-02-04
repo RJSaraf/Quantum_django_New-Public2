@@ -220,7 +220,7 @@ class UserInfoUpdateView(LoginRequiredMixin, UpdateView):
      template_name = "EditUserInfo.html"
 
 
-class SignUp(LoginRequiredMixin, CreateView):
+class SignUp(CreateView):
 
    form_class = UserCreateForm
    success_url = reverse_lazy('accounts:login')
