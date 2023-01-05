@@ -81,7 +81,7 @@ class FriendsList(models.Model):
 
     def add_friend(self, account):
         if not account in self.friends.all():
-            self.friends.add(account)
+            self.friends.add(account)   
 
     def remove_friend(self, account):
         if account in self.friends.all():

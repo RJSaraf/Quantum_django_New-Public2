@@ -28,15 +28,15 @@ class UserForm(forms.ModelForm):
 
         widgets = {
 
-            'birth_date':forms.DateInput(attrs={'placeholder':'M/D/Y'}),
-            'age':forms.NumberInput(attrs={'class':'a'}),
-            'phone_number':forms.NumberInput(attrs={'class':'w3-padding'}),
-            'Profession':forms.TextInput(attrs={'class':'a'}),
-            'gender':forms.TextInput(attrs={'class':'a'}),
-            'country':forms.TextInput(attrs={'class':'a'}),
-            'state':forms.TextInput(attrs={'class':'a'}),
-            'city':forms.TextInput(attrs={'class':'a'}),
-            'address':forms.Textarea(attrs={'class':'a'}),
+            'birth_date':forms.DateInput(attrs={'placeholder':'M/D/Y','class':'w3-padding w-50'}),
+            'age':forms.NumberInput(attrs={'class':'a w-50'}),
+            'phone_number':forms.NumberInput(attrs={'class':'w3-padding w-50'}),
+            'profession':forms.TextInput(attrs={'class':'a w-50'}),
+            'gender':forms.TextInput(attrs={'class':'a w-50'}),
+            'country':forms.TextInput(attrs={'class':'a w-50'}),
+            'state':forms.TextInput(attrs={'class':'a w-50'}),
+            'city':forms.TextInput(attrs={'class':'a w-50'}),
+            'address':forms.Textarea(attrs={'class':'a w-50'}),
             'propic':forms.FileInput(attrs={'class':'m-2 border w3-blue-gray w3-round-large'}),
             'cover':forms.FileInput(attrs={'class':'m-2 border w3-blue-gray w3-round-large'}),
 

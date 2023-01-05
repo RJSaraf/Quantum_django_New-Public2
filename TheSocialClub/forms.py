@@ -12,8 +12,8 @@ class PostForm(forms.ModelForm):
 
         widgets = {
          
-            'message':forms.Textarea(attrs={'class':'post-text', 'placeholder': 'Whats on your mind!'}),
-            'postimage':forms.FileInput(attrs={'class':'postimage'}),
+            'message':forms.Textarea(attrs={'class':'post-text w-7  5', 'placeholder': 'Whats on your mind!'}),
+            'postimage':forms.FileInput(attrs={'class':'postimage w3-blue w3-round','style':'width:102  px;'}),
 
         }
         
