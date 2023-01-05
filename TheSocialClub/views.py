@@ -7,9 +7,9 @@ from TheSocialClub.forms import PostForm, GroupForm, ChatForm
 from TheSocialClub.models import Group, GroupMember, Post, FriendsList, FriendRequest
 from django.db.models import Q
 
-from haystack.generic_views import SearchView
+#from haystack.generic_views import SearchView
 from django import forms
-from haystack.forms import SearchForm
+#from haystack.forms import SearchForm
 
 # Create your views here.
 # TheSocialClub
@@ -28,7 +28,7 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
-class TheSocialClub(LoginRequiredMixin, SearchView):
+class TheSocialClub(LoginRequiredMixin, generic.TemplateView):
     login_url = 'accounts:login'
     
     template_name = 'indexTSC.html'
@@ -39,7 +39,7 @@ class TheSocialClub(LoginRequiredMixin, SearchView):
         context['posts'] = Post.objects.all()
         context['postform'] = PostForm
         context['friendlist'] = FriendsList.objects.filter(user_id=self.request.user.id)
-        context['form'] = SearchForm
+        #context['form'] = SearchForm
         return context
 
 

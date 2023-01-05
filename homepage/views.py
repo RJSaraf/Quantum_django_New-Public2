@@ -18,6 +18,7 @@ from django.contrib.auth.models import AnonymousUser
 
 class HomeView(TemplateView):
 
+
     template_name = "index.html"
 
     def get_context_data(self, *args, **kwargs):

@@ -91,20 +91,22 @@
 
         <div id="id01" class="w3-modal">
           <div class="w3-modal-content w3-card-4">
-            <header class="w3-container border-bottom"> 
-              <span onclick="document.getElementById('id01').style.display='none'" 
-              class="w3-button w3-display-topright">&times;</span>
-              <h2>Create Post</h2>
-            </header>
-            <br>
-            <div class="w3-container">
-              <form action="{% url 'TheSocialClub:createpost' username=request.user.username %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ postform.as_p }}
-                <button type="submit" value="Post" class="w3-2021-french-blue w3-round-large" style="width:100%;">Post</button>
-              </form>
-              <br>
-            </div>
+                <center>
+                <header class="w3-container border-bottom"> 
+                <span onclick="document.getElementById('id01').style.display='none'" 
+                class="w3-button w3-display-topright">&times;</span>
+                <h2>Create Post</h2>
+                </header>
+                <br>
+                <div class="w3-container">
+                    <form action="{% url 'TheSocialClub:createpost' username=request.user.username %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ postform.as_p }}
+                        <button type="submit" value="Post" class="w3-2021-french-blue w3-round-large" style="width:30%;">Post</button>
+                    </form>
+                    <br>
+                </div>
+                <center>
           </div>
         </div>
       

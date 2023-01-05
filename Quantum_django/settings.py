@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'homepage',
     'accounts',
      #####
-    'channels',
-    'braces',
-    'dajaxice',
-    'dajax',
+    #'channels',
+    #'braces',
+    #'dajaxice',
+    #'dajax',
     'rest_framework',
     "bootstrap3",
-    'haystack',
+    
      #####
     'django.contrib.admin',
     'django.contrib.auth',
@@ -103,6 +103,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+"""
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
@@ -111,6 +112,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+"""
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

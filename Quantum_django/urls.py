@@ -16,7 +16,7 @@ Including another URLconf
 
 
 from django.contrib import admin
-from django.conf.urls import url
+from django.urls import re_path as url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import View, TemplateView, ListView, DetailView
@@ -29,7 +29,7 @@ urlpatterns = [
     url(r"^admin/", admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    url(r'^search/', include('haystack.urls')),
+    #url(r'^search/', include('haystack.urls')),
 
     path('', include('homepage.urls')),
     path('blog/', include('blog.urls')),
